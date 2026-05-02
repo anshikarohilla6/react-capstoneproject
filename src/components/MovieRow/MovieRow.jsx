@@ -1,58 +1,74 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import MovieCard from '../MovieCard/MovieCard';
 import './MovieRow.css';
 
-// ── MovieRow Component ──────────────────────────────────────────────────────
-// A horizontally scrollable row of MovieCards with arrow navigation.
-function MovieRow({ title, movies }) {
-  // Reference to the scrollable container
-  var rowRef = useRef(null);
+function MovieRow({ title, movies, badge }) {
+  const rowRef   = useRef(null);
+  const [canLeft, setCanLeft]   = useState(false);
+  const [canRight, setCanRight] = useState(true);
 
-  // Scroll the row left or right by a set amount
-  function scroll(direction) {
-    var amount = 700;
-    if (rowRef.current) {
-      rowRef.current.scrollBy({
-        left: direction === 'right' ? amount : -amount,
-        behavior: 'smooth',
-      });
-    }
+  function checkScroll() {
+    const el = rowRef.current;
+    if (!el) return;
+    setCanLeft(el.scrollLeft > 10);
+    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  }
+
+  useEffect(() => {
+    const el = rowRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
+    return () => el.removeEventListener('scroll', checkScroll);
+  }, []);
+
+  function scroll(dir) {
+    rowRef.current?.scrollBy({ left: dir === 'right' ? 720 : -720, behavior: 'smooth' });
   }
 
   return (
     <section className="movie-row">
-      {/* Row header */}
       <div className="movie-row__header">
-        <h2 className="movie-row__title">{title}</h2>
-        <button className="movie-row__see-all">See All →</button>
+        <div className="movie-row__title-group">
+          {badge && <span className="movie-row__badge">{badge}</span>}
+          <h2 className="movie-row__title">{title}</h2>
+        </div>
+        <button className="movie-row__see-all">
+          View all
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
       </div>
 
-      {/* Scrollable wrapper with gradient fade on edges */}
       <div className="movie-row__wrapper">
-        {/* Left scroll arrow */}
-        <button
-          className="movie-row__arrow movie-row__arrow--left"
-          onClick={function () { scroll('left'); }}
-          aria-label="Scroll left"
-        >
-          ‹
-        </button>
+        {canLeft && (
+          <button
+            className="movie-row__arrow movie-row__arrow--left"
+            onClick={() => scroll('left')}
+            aria-label="Scroll left"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+        )}
 
-        {/* Cards container */}
         <div className="movie-row__cards" ref={rowRef}>
-          {movies.map(function (movie) {
-            return <MovieCard key={movie.id} movie={movie} />;
-          })}
+          {movies.map(movie => <MovieCard key={movie.id} movie={movie} />)}
         </div>
 
-        {/* Right scroll arrow */}
-        <button
-          className="movie-row__arrow movie-row__arrow--right"
-          onClick={function () { scroll('right'); }}
-          aria-label="Scroll right"
-        >
-          ›
-        </button>
+        {canRight && (
+          <button
+            className="movie-row__arrow movie-row__arrow--right"
+            onClick={() => scroll('right')}
+            aria-label="Scroll right"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        )}
       </div>
     </section>
   );

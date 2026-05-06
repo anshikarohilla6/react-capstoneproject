@@ -1,0 +1,144 @@
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+  animation: skeleton-shimmer 1.35s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.hero-skeleton {
+  min-height: 82vh;
+  padding: 120px 60px 72px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.skeleton__backdrop {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+}
+
+.skeleton__panel {
+  position: relative;
+  z-index: 1;
+  max-width: 640px;
+  margin-top: auto;
+  display: grid;
+  gap: 16px;
+}
+
+.skeleton__badge,
+.skeleton__line,
+.skeleton__chip,
+.skeleton__action,
+.skeleton__card,
+.skeleton__topbar,
+.skeleton__row-header {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+.skeleton__badge {
+  width: 180px;
+  height: 18px;
+}
+
+.skeleton__line--xl {
+  width: min(560px, 86%);
+  height: 78px;
+  border-radius: 24px;
+}
+
+.skeleton__line--lg {
+  width: min(420px, 70%);
+  height: 22px;
+}
+
+.skeleton__line--md {
+  width: min(340px, 56%);
+  height: 18px;
+}
+
+.skeleton__line--sm {
+  width: 96px;
+  height: 14px;
+}
+
+.skeleton__chips,
+.skeleton__actions,
+.skeleton__cards {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.skeleton__chip {
+  width: 96px;
+  height: 34px;
+}
+
+.skeleton__action {
+  width: 132px;
+  height: 42px;
+}
+
+.skeleton__action--primary {
+  width: 156px;
+}
+
+.movie-row-skeleton {
+  padding: 36px 60px 20px;
+}
+
+.skeleton__row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  margin-bottom: 18px;
+}
+
+.skeleton__cards {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.skeleton__card {
+  flex: 0 0 220px;
+  height: 330px;
+  border-radius: 28px;
+}
+
+.skeleton__topbar {
+  height: 86px;
+  border-radius: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-skeleton {
+    min-height: 72vh;
+    padding: 104px 24px 64px;
+  }
+
+  .movie-row-skeleton {
+    padding: 28px 20px 16px;
+  }
+
+  .skeleton__card {
+    flex-basis: 170px;
+    height: 280px;
+  }
+}
